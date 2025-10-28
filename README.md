@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Atividade 3 – O Roubo do Diamante do Amanhecer
 
-## Getting Started
+Aplicação web em Next.js para investigar um caso fictício de roubo no museu. A interface permite executar consultas SQL somente-SELECT sobre um banco MySQL com tabelas de funcionários, salas, obras, acessos, movimentações e depoimentos. As consultas são enviadas para a rota `POST /api/query`, que valida e executa o SQL via Prisma.
 
-First, run the development server:
+### Principais pacotes
+- **Next.js 16**: framework React para web/app router
+- **React 19 / React DOM 19**: biblioteca de UI
+- **Prisma 6** e **@prisma/client 6**: ORM e cliente gerado
+- **TypeScript 5**: tipagem estática
+- **Tailwind CSS 4**: utilitários de estilo (classes já usadas na UI)
+- **dotenv 17**: gerenciamento de variáveis de ambiente
 
+## Pré‑requisitos
+- **Node.js 18+** e **npm**
+- **MySQL 8+** em execução (local ou remoto)
+
+## Configuração e uso
+1. **Instalar dependências**
+   ```bash
+   npm install
+   ```
+
+2. **Configurar variáveis de ambiente**
+   Crie um arquivo `.env` na raiz com a variável `DATABASE_URL` apontando para seu MySQL:
+   ```dotenv
+   DATABASE_URL="mysql://usuario:senha@localhost:3306/atividade3"
+   ```
+
+3. **Gerar o Prisma Client**
+   ```bash
+   npx prisma generate
+   ```
+
+4. **Criar/atualizar o schema do banco** (escolha uma opção):
+   - Com migrações (desenvolvimento):
+     ```bash
+     npx prisma migrate dev --name init
+     ```
+   - Aplicar somente o schema (sem histórico de migração):
+     ```bash
+     npx prisma db push
+     ```
+   - Ou importar os dados do arquivo `banco.SQL` diretamente no seu MySQL (ex.: via cliente gráfico ou `mysql < banco.SQL`).
+
+5. **Executar o servidor**
+   ```bash
+   npm run dev
+   # http://localhost:3000
+   ```
+
+### Como usar
+- Na página inicial (`/`), escreva uma consulta SELECT simples e clique em "Executar".
+- Restrições de segurança (aplicadas na API):
+  - Apenas comandos que iniciam com `SELECT` são aceitos
+  - Sem `;`, comentários (`--`, `/* */`) ou `UNION`
+  - Palavras como `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, etc. são bloqueadas
+
+#### Exemplo de chamada à API
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+curl -X POST http://localhost:3000/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"query":"SELECT * FROM funcionarios"}'
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Estrutura relevante
+- `app/page.tsx`: interface para escrever e executar consultas
+- `app/api/query/route.ts`: endpoint que valida e executa SELECT via Prisma
+- `lib/prisma.ts`: inicialização do Prisma Client
+- `prisma/schema.prisma`: modelo e datasource (MySQL)
+- `prisma.config.ts`: configuração do Prisma CLI
+- `app/generated/prisma/*`: cliente Prisma gerado (não editar manualmente)
+- `public/diamante.png`: imagem usada na página
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts úteis
+- `npm run dev`: ambiente de desenvolvimento
+- `npm run build`: build de produção
+- `npm run start`: inicia build de produção
+- `npx prisma generate`: gera o cliente Prisma
+- `npx prisma migrate dev`: cria/aplica migrações em dev
+- `npx prisma db push`: aplica o schema sem migrações
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Solução de problemas
+- **Erro de conexão ao banco**: verifique `DATABASE_URL` e se o MySQL está rodando/acessível.
+- **Cliente Prisma não encontrado**: rode `npx prisma generate` após ajustar `.env`.
+- **Tabelas vazias**: importe `banco.SQL` ou crie seeds próprios após `db push`/`migrate`.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
