@@ -15,32 +15,17 @@ Aplicação web em Next.js para investigar um caso fictício de roubo no museu. 
 - **MySQL 8+** em execução (local ou remoto)
 
 ## Configuração e uso
-1. **Instalar dependências**
+1. **Ambientação**
    ```bash
    npm install
    ```
 
 2. **Configurar variáveis de ambiente**
-   Crie um arquivo `.env` na raiz com a variável `DATABASE_URL` apontando para seu MySQL:
+   Crie um arquivo `.env` na raiz com a variável `DATABASE_URL` apontando para seu MySQL/PostGRES:
    ```dotenv
-   DATABASE_URL="mysql://usuario:senha@localhost:3306/atividade3"
+   DATABASE_URL="mysql://usuario:senha@localhost:3306/nome_do_banco"
    ```
-
-3. **Gerar o Prisma Client**
-   ```bash
-   npx prisma generate
-   ```
-
-4. **Criar/atualizar o schema do banco** (escolha uma opção):
-   - Com migrações (desenvolvimento):
-     ```bash
-     npx prisma migrate dev --name init
-     ```
-   - Aplicar somente o schema (sem histórico de migração):
-     ```bash
-     npx prisma db push
-     ```
-   - Ou importar os dados do arquivo `banco.SQL` diretamente no seu MySQL (ex.: via cliente gráfico ou `mysql < banco.SQL`).
+   Em prisma/schema.prisma, altere o 'provider' para seu SGBD de preferência (MySQL é o padrão)
 
 5. **Executar o servidor**
    ```bash
@@ -75,12 +60,4 @@ curl -X POST http://localhost:3000/api/query \
 - `npm run dev`: ambiente de desenvolvimento
 - `npm run build`: build de produção
 - `npm run start`: inicia build de produção
-- `npx prisma generate`: gera o cliente Prisma
-- `npx prisma migrate dev`: cria/aplica migrações em dev
-- `npx prisma db push`: aplica o schema sem migrações
-
-## Solução de problemas
-- **Erro de conexão ao banco**: verifique `DATABASE_URL` e se o MySQL está rodando/acessível.
-- **Cliente Prisma não encontrado**: rode `npx prisma generate` após ajustar `.env`.
-- **Tabelas vazias**: importe `banco.SQL` ou crie seeds próprios após `db push`/`migrate`.
 
