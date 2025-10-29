@@ -1,4 +1,4 @@
-## Atividade 3 – O Roubo do Diamante do Amanhecer
+## O Roubo do Diamante do Amanhecer
 
 Aplicação web em Next.js para investigar um caso fictício de roubo no museu. A interface permite executar consultas SQL somente-SELECT sobre um banco MySQL com tabelas de funcionários, salas, obras, acessos, movimentações e depoimentos. As consultas são enviadas para a rota `POST /api/query`, que valida e executa o SQL via Prisma.
 
