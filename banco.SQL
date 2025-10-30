@@ -1,20 +1,163 @@
--- ================================
--- BANCO DE DADOS: roubo_diamante - versão final
--- ================================
+DROP DATABASE IF EXISTS `sql10805347`;
+CREATE DATABASE `sql10805347`;
+USE `sql10805347`; -- Nome do Banco de Dados
 
-DROP DATABASE IF EXISTS roubo_diamante;
-CREATE DATABASE roubo_diamante;
-USE roubo_diamante;
+-- -----------------------------------------------------
+-- Table `sql10805347`.`funcionarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`funcionarios` (
+  `id` INT NOT NULL,
+  `cpf` VARCHAR(14) NOT NULL,
+  `nome` VARCHAR(50) NOT NULL,
+  `cargo` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
 
--- ================================
--- TABELA FUNCIONARIOS
--- ================================
-CREATE TABLE funcionarios (
-    id INT PRIMARY KEY,
-    cpf VARCHAR(14),
-    nome VARCHAR(50),
-    cargo VARCHAR(50)
-);
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`salas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`salas` (
+  `id` INT NOT NULL,
+  `nome` VARCHAR(50) NOT NULL,
+  `localizacao` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
+
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`acessos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`acessos` (
+  `id` INT NOT NULL,
+  `data` CHAR(10) NOT NULL,
+  `entrada` CHAR(5) NOT NULL,
+  `saida` CHAR(5) NOT NULL,
+  `funcionario_id` INT NOT NULL,
+  `sala_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_acessos_funcionarios1_idx` (`funcionario_id` ASC) ,
+  INDEX `fk_acessos_salas1_idx` (`sala_id` ASC) ,
+  CONSTRAINT `fk_acessos_funcionarios1`
+    FOREIGN KEY (`funcionario_id`)
+    REFERENCES `sql10805347`.`funcionarios` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_acessos_salas1`
+    FOREIGN KEY (`sala_id`)
+    REFERENCES `sql10805347`.`salas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
+
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`depoimentos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`depoimentos` (
+  `id` INT NOT NULL,
+  `relato` TEXT NOT NULL,
+  `data` CHAR(10) NOT NULL,
+  `hora` CHAR(5) NOT NULL,
+  `funcionario_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_depoimentos_funcionarios1_idx` (`funcionario_id` ASC) ,
+  CONSTRAINT `fk_depoimentos_funcionarios1`
+    FOREIGN KEY (`funcionario_id`)
+    REFERENCES `sql10805347`.`funcionarios` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
+
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`obras`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`obras` (
+  `id` INT NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `tipo` VARCHAR(50) NOT NULL,
+  `sala_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_obras_salas1_idx` (`sala_id` ASC) ,
+  CONSTRAINT `fk_obras_salas1`
+    FOREIGN KEY (`sala_id`)
+    REFERENCES `sql10805347`.`salas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
+
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`movimentacoes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`movimentacoes` (
+  `id` INT NOT NULL,
+  `data` CHAR(10) NOT NULL,
+  `hora` CHAR(5) NOT NULL,
+  `descricao` VARCHAR(50) NOT NULL,
+  `obra_id` INT NOT NULL,
+  `sala_origem` INT NOT NULL,
+  `sala_destino` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_movimentacoes_obras1_idx` (`obra_id` ASC) ,
+  INDEX `fk_movimentacoes_salas1_idx` (`sala_origem` ASC) ,
+  INDEX `fk_movimentacoes_salas2_idx` (`sala_destino` ASC) ,
+  CONSTRAINT `fk_movimentacoes_obras1`
+    FOREIGN KEY (`obra_id`)
+    REFERENCES `sql10805347`.`obras` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_movimentacoes_salas1`
+    FOREIGN KEY (`sala_origem`)
+    REFERENCES `sql10805347`.`salas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_movimentacoes_salas2`
+    FOREIGN KEY (`sala_destino`)
+    REFERENCES `sql10805347`.`salas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+;
+
+
+-- -----------------------------------------------------
+-- Table `sql10805347`.`permissoes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `sql10805347`.`permissoes` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `funcionario_id` INT NOT NULL,
+  `sala_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_permissoes_funcionarios_idx` (`funcionario_id` ASC) ,
+  INDEX `fk_permissoes_salas1_idx` (`sala_id` ASC) ,
+  CONSTRAINT `fk_permissoes_funcionarios`
+    FOREIGN KEY (`funcionario_id`)
+    REFERENCES `sql10805347`.`funcionarios` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_permissoes_salas1`
+    FOREIGN KEY (`sala_id`)
+    REFERENCES `sql10805347`.`salas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 80
+DEFAULT CHARACTER SET = utf8mb4
+;
+
 
 INSERT INTO funcionarios (id, cpf, nome, cargo) VALUES
 (1,'847.392.561-04','Ricardo Mendes','Segurança Noturno'),
@@ -59,11 +202,13 @@ INSERT INTO funcionarios (id, cpf, nome, cargo) VALUES
 (40,'781.394.025-12','Diego Alves','Segurança Noturno');
 
 
-CREATE TABLE permissoes (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  funcionario_id INT,
-  sala_id INT
-);
+INSERT INTO salas (id, nome, localizacao) VALUES
+(1,'Sala de Tesouros','Subsolo'),
+(2,'Galeria Antiga','Térreo'),
+(3,'Sala Moderna','1º Andar'),
+(4,'Depósito Técnico','Subsolo'),
+(5,'Hall Principal','Entrada'),
+(6,'Galeria Contemporânea','2º Andar');
 
 -- Inserindo permissões com variação: alguns 1 sala, outros 2, outros 3, e 2 com todas as salas
 INSERT INTO permissoes (funcionario_id, sala_id) VALUES
@@ -111,33 +256,6 @@ INSERT INTO permissoes (funcionario_id, sala_id) VALUES
 
 
 
--- ================================
--- TABELA SALAS
--- ================================
-CREATE TABLE salas (
-    id INT PRIMARY KEY,
-    nome VARCHAR(50),
-    localizacao VARCHAR(50)
-);
-
-INSERT INTO salas (id, nome, localizacao) VALUES
-(1,'Sala de Tesouros','Subsolo'),
-(2,'Galeria Antiga','Térreo'),
-(3,'Sala Moderna','1º Andar'),
-(4,'Depósito Técnico','Subsolo'),
-(5,'Hall Principal','Entrada'),
-(6,'Galeria Contemporânea','2º Andar');
-
--- ================================
--- TABELA OBRAS
--- ================================
-CREATE TABLE obras (
-    id INT PRIMARY KEY,
-    nome VARCHAR(100),
-    tipo VARCHAR(50),
-    sala_id INT
-);
-
 INSERT INTO obras (id, nome, tipo, sala_id) VALUES
 (1,'Diamante do Amanhecer','Joia',1),
 (2,'Trono de Mármore','Escultura',2),
@@ -151,18 +269,6 @@ INSERT INTO obras (id, nome, tipo, sala_id) VALUES
 (10,'Vaso Chines','Artefato',2),
 (11,'Estátua de Vênus','Escultura',2),
 (12,'Tábua Egípcia','Artefato',3);
-
--- ================================
--- TABELA ACESSOS
--- ================================
-CREATE TABLE acessos (
-    id INT PRIMARY KEY,
-    funcionario_id INT,
-    sala_id INT,
-    data CHAR(10),
-    entrada CHAR(5),
-    saida CHAR(5)
-);
 
 -- horários múltiplos e suspeitos, incluindo o culpado
 INSERT INTO acessos (id, funcionario_id, sala_id, data, entrada, saida) VALUES
@@ -188,21 +294,8 @@ INSERT INTO acessos (id, funcionario_id, sala_id, data, entrada, saida) VALUES
 (19,19,3,'10-09-2025','09:15','10:15'),
 (20,20,1,'10-09-2025','16:00','17:00');
 
--- ================================
--- TABELA MOVIMENTACOES
--- ================================
-CREATE TABLE movimentacoes (
-    id INT PRIMARY KEY,
-    obra_id INT,
-    sala_origem INT,
-    sala_destino INT,
-    data CHAR(10),
-    hora CHAR(5),
-    acao VARCHAR(50)
-);
-
-INSERT INTO movimentacoes (id, obra_id, sala_origem, sala_destino, data, hora, acao) VALUES
-(1,1,1,0,'15-09-2025','02:25','Destino nao informado'),
+INSERT INTO movimentacoes (id, obra_id, sala_origem, sala_destino, data, hora, descricao) VALUES
+(1,1,1,NULL,'15-09-2025','02:25','Destino não informado'),
 (2,2,2,2,'14-09-2025','17:30','Checagem de exposição'),
 (3,3,3,3,'15-09-2025','08:15','Inspeção de conservação'),
 (4,4,1,1,'14-09-2025','14:00','Verificação de segurança'),
@@ -214,17 +307,6 @@ INSERT INTO movimentacoes (id, obra_id, sala_origem, sala_destino, data, hora, a
 (10,10,2,2,'10-09-2025','16:30','Transporte interno'),
 (11,11,2,2,'13-09-2025','15:30','Inspeção artística'),
 (12,12,3,3,'12-09-2025','10:45','Checagem documental');
-
--- ================================
--- TABELA DEPOIMENTOS
--- ================================
-CREATE TABLE depoimentos (
-    id INT PRIMARY KEY,
-    funcionario_id INT,
-    relato TEXT,
-    data CHAR(10),
-    hora CHAR(5)
-);
 
 INSERT INTO depoimentos (id, funcionario_id, relato, data, hora) VALUES
 (1,1,'Ronda às duas. Notei Júlio próximo à Sala de Tesouros. Estranho.', '15-09-2025','08:00'),

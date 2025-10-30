@@ -22,7 +22,7 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "C:\\Users\\Configuração\\Desktop\\legado\\atividade3\\app\\generated\\prisma",
+      "value": "C:\\Users\\brunocss\\Desktop\\projetos\\app\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -36,7 +36,7 @@ const config: runtime.GetPrismaClientConfig = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Configuração\\Desktop\\legado\\atividade3\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\brunocss\\Desktop\\projetos\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../../../prisma",
