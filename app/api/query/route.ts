@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ rows });
   } catch (err: any) {
     return NextResponse.json(
-      { error: 'Erro ao executar consulta. Verifique novamente a sintáxe.' },
+      { error: err?.message ?? 'Erro ao executar consulta' },
       { status: 500 }
     );
   }
