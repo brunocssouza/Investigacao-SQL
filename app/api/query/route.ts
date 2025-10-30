@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { queryRaw } from '@/lib/db';
 
 function isSelectOnly(sql: string): boolean {
   if (!sql) return false;
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const rows = (await prisma.$queryRawUnsafe<any[]>(query)) ?? [];
+    const rows = (await queryRaw(query)) ?? [];
     return NextResponse.json({ rows });
   } catch (err: any) {
     return NextResponse.json(
