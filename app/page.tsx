@@ -276,7 +276,7 @@ export default function Page() {
         </p>
         <textarea
           rows={6}
-          placeholder="Escreva sua consulta SELECT aqui"
+          placeholder="Digite aqui."
           className="input-control mb-3 w-full font-mono p-3"
         />
       </section>
