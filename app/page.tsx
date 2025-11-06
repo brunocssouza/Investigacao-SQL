@@ -99,7 +99,7 @@ export default function Page() {
       cancelButtonColor: "#6b7280",
     }).then((result) => {
       if (result.isConfirmed) {
-        if (name.toLowerCase() === "alexandre torres") {
+        if (name.toLowerCase() === "hugo martins") {
           setTentativaErrada(false);
           setTentativaCerta(true);
           Swal.fire({
