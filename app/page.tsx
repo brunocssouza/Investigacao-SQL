@@ -221,7 +221,7 @@ export default function Page() {
         </p>
         <button
           onClick={() => setDicas(!dicas)}
-          className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-indigo-500 px-2 py-2 font-semibold text-white transition-all duration-500 hover:pr-8 mt-3 disabled:opacity-50"
+          className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-indigo-500 active:bg-indigo-600 px-2 py-2 font-semibold text-white transition-all duration-500 hover:pr-8 mt-3 disabled:opacity-50"
         >
           <span className="transition-all duration-500 group-hover:pr-6 px-2">
             Ver exemplos
@@ -251,9 +251,16 @@ export default function Page() {
                   {ex.sql}
                 </pre>
                 <button
-                  onClick={() => setQuery(ex.sql)}
+                  onClick={
+                    () => {
+                      setQuery(ex.sql);
+                      const resultSection = document.getElementById("consulta-input");
+                      if (resultSection) resultSection.scrollIntoView({ behavior: "smooth" });
+                    }
+
+                  }
                   disabled={loading}
-                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-md bg-indigo-500 px-2 py-2 font-semibold text-white transition-all duration-500 hover:pr-8  disabled:opacity-50"
+                  className="group relative inline-flex items-center justify-center overflow-hidden rounded-md active:bg-indigo-600 bg-indigo-500 px-2 py-2 font-semibold text-white transition-all duration-500 hover:pr-8  disabled:opacity-50"
                 >
                   <span className="transition-all duration-500 group-hover:pr-6">
                     Usar query
@@ -290,6 +297,7 @@ export default function Page() {
           Somente consultas SELECT simples são permitidas.
         </p>
         <textarea
+          id="consulta-input"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           rows={6}
