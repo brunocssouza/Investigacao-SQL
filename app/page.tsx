@@ -14,6 +14,7 @@ export default function Page() {
   const [dicas, setDicas] = useState(false);
   const [tentativaErrada, setTentativaErrada] = useState(false);
   const [tentativaCerta, setTentativaCerta] = useState(false)
+  const [tentativas, setTentativas] = useState(0)
 
   const columns = useMemo(() => {
     if (!rows || rows.length === 0) return [] as string[];
@@ -71,6 +72,8 @@ export default function Page() {
 
   function guessCulprit(inputValue: string) {
     const name = inputValue.trim();
+    
+    setTentativas((prev) => prev + 1);
 
     if (!name) {
       Swal.fire({
@@ -378,12 +381,14 @@ export default function Page() {
         </button>
         {tentativaErrada && (
           <div className="mt-4 text-red-500 font-semibold">
+            Tentativas: {tentativas} <br></br>
             Você errou... mas não desista! Continue investigando e tente
             novamente.
           </div>
         )}
         {tentativaCerta && (
           <div className="mt-4 text-green-500 font-semibold">
+            Tentativas: {tentativas} <br></br>
             Parabéns! Você solucionou o caso com sucesso!
           </div>
         )}
