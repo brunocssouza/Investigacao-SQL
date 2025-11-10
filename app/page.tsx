@@ -140,7 +140,7 @@ export default function Page() {
               “Aurora Arte & História” sofreu o roubo de seu item mais valioso:{" "}
               <strong>o Diamante do Amanhecer</strong>, uma joia lendária
               recém-chegada de uma exposição internacional. A peça desapareceu
-              da <strong>Sala de Tesouros</strong> entre{" "}
+              entre 
               <strong>02h e 03h da manhã</strong>. Nenhum alarme disparou.{" "}
               <i>
                 Apenas os registros de acesso e os depoimentos dos funcionários
