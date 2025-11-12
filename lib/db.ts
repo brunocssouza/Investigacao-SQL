@@ -21,4 +21,9 @@ export async function queryRaw(sql: string): Promise<any[]> {
   return rows as any[];
 }
 
+export async function execute(sql: string, params: any[] = []): Promise<any[]> {
+  const [rows] = await pool.execute(sql, params);
+  return rows as any[];
+}
+
 
