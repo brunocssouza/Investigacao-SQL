@@ -25,7 +25,7 @@ export default function RootLayout({
 
         <footer className="fixed bottom-0 w-full border-t border-white/10 bg-slate-900/60 backdrop-blur supports-backdrop-filter:bg-slate-900/40">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 gap-4">
-            <div className="text-sm text-slate-300">
+            <div className="text-sm text-white">
               Caso encontre dificuldades, você pode pedir auxílio para um dos orientadores.
             </div>
             <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ export default function RootLayout({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn de Bruno Souza"
-                className="inline-flex items-center justify-center rounded-md p-2 text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center rounded-md p-2 text-white hover:text-white hover:bg-white/10 transition-colors"
                 title="LinkedIn"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
@@ -46,7 +46,7 @@ export default function RootLayout({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub de Bruno Souza"
-                className="inline-flex items-center justify-center rounded-md p-2 text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+                className="inline-flex items-center justify-center rounded-md p-2 text-white hover:text-white hover:bg-white/10 transition-colors"
                 title="GitHub"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">

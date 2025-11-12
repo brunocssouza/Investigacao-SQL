@@ -8,9 +8,12 @@ button {
   cursor: pointer;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #3e3233
+}
+
 /* Newspaper theme utilities */
 .newspaper {
-  background: #f7f6f2;
   color: #111;
   font-family: Georgia, "Times New Roman", Times, serif;
   line-height: 1.65;
@@ -41,7 +44,7 @@ button {
 
 .newspaper-section {
   position: relative;
-  background: #fff;
+
 
   box-shadow: 0 2px 0 #111;
 
@@ -61,7 +64,7 @@ button {
   text-transform: uppercase;
   letter-spacing: .06em;
   text-align: center;
-  border-bottom: 3px double #111;
+  border-bottom: 6px solid #111;
   padding-bottom: .5rem;
   margin-bottom: .75rem;
 }
@@ -74,7 +77,8 @@ button {
 }
 
 .newspaper-lead {
-  font-size: 1.125rem;
+  font-size: 1.925rem;
+  
 }
 
 .drop-cap:first-letter {
@@ -278,30 +282,32 @@ button {
 
 /* Botões circulares flutuantes (p/ navegação) */
 .float-nav-btn {
-  background: rgba(255,255,255,0.14);
+  background: #000;
   border: 1px solid rgba(255,255,255,0.22);
   color: #e5e7eb;
-  width: 44px;
-  height: 44px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: .5rem .75rem; /* espaço para texto */
+  min-height: 44px;      /* área clicável mínima */
+  white-space: nowrap;   /* evita quebra do rótulo */
+  font-size: .875rem;    /* tamanho do texto menor */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
   box-shadow: 0 8px 20px rgba(0,0,0,0.35);
 }
 .float-nav-btn:hover {
-  transform: translateY(-1px) scale(1.05);
-  background: rgba(255,255,255,0.18);
-  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px) scale(1.03);
+  background: #111;
+  border-color: rgba(255,255,255,0.35);
 }
 .float-nav-btn.active {
-  background: rgba(99,102,241,0.18);
-  border-color: rgba(99,102,241,0.45);
-  color: #c7d2fe;
-  box-shadow: 0 10px 26px rgba(99,102,241,0.35);
+  background: #f59e0b;  /* âmbar para alto contraste */
+  border-color: #f59e0b;
+  color: #111;          /* texto escuro para contraste no âmbar */
+  box-shadow: 0 10px 26px rgba(245,158,11,0.35);
 }
 
 /* Scrollbar discreta em dark */
@@ -319,4 +325,9 @@ button {
 }
 *::-webkit-scrollbar-thumb:hover {
   background: rgba(255,255,255,0.24);
+}
+
+/* Oculta o footer quando a Introdução estiver ativa */
+.hide-footer footer {
+  display: none !important;
 }
