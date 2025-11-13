@@ -41,7 +41,7 @@ export default function ShowWinners() {
 
 	return (
 		<div className="mt-4 p-4 bg-slate-800 rounded-md w-full max-w-2xl">
-			<h3 className="font-semibold text-xl mb-4">Vencedores Anteriores</h3>
+			<p className="font-semibold text-xl mb-4 text-amber-500">Vencedores Anteriores</p>
 			{loading ? (
 				<div className="text-slate-300">Carregando...</div>
 			) : error ? (

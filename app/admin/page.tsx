@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
         onSubmit={onSubmit}
         className="w-full max-w-sm rounded-lg border border-white/10 p-6 bg-white/5 backdrop-blur"
       >
-        <h1 className="text-xl font-semibold mb-4">Acesso do Administrador</h1>
+        <p className="text-xl font-semibold mb-4 text-slate-300">Acesso do Administrador</p>
         <label className="block text-sm mb-2">Senha</label>
         <input
           type="password"

@@ -133,16 +133,16 @@ export default function AdminCrudPage() {
   return (
     <div className="w-11/12 mx-auto py-8 mb-16">
       <div className="mb-6 flex items-center gap-3">
-        <h1 className="text-xl font-semibold">CRUD Administrativo</h1>
+        <p className="text-xl font-semibold text-slate-300">CRUD Administrativo</p>
         <div className="ml-auto">
           <select
             className="input-control p-2"
             value={table}
             onChange={(e) => setTable(e.target.value)}
           >
-            <option value="">Selecione uma tabela</option>
+            <option value="" className="text-black">Selecione uma tabela</option>
             {tables.map((t) => (
-              <option key={t} value={t}>
+              <option className="text-black" key={t} value={t}>
                 {t}
               </option>
             ))}
@@ -157,7 +157,7 @@ export default function AdminCrudPage() {
       {table && !loading && (
         <div className="space-y-6">
           <div className="glass-section p-4">
-            <h2 className="font-semibold mb-3">Inserir novo registro</h2>
+            <p className="font-semibold mb-3 text-slate-300">Inserir novo registro</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
               {insertableColumns.map((c) => (
                 <div key={c.column_name}>
