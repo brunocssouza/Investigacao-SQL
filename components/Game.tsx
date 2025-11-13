@@ -323,6 +323,12 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                                                 <button
                                                     onClick={() => {
                                                         setQuery(ex.sql);
+                                                        setActiveSection(SECTION_INDEX.CONSOLE);
+                                                        requestAnimationFrame(() => {
+                                                            const el = document.getElementById("consulta-input") as HTMLTextAreaElement | null;
+                                                            el?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                                            el?.focus();
+                                                        });
                                                     }}
                                                     disabled={loading}
                                                     className="newspaper-button"
