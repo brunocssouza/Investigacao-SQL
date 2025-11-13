@@ -10,7 +10,13 @@ export async function GET(request: Request) {
     if (!table) {
       return NextResponse.json({ error: "Tabela não informada" }, { status: 400 });
     }
-    const rows = await execute(`SELECT * FROM \`${table}\` LIMIT ${limit}`);
+
+    // Identificadores seguros: apenas letras, números e underscore
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(table)) {
+      return NextResponse.json({ error: "Nome de tabela inválido" }, { status: 400 });
+    }
+
+    const rows = await execute(`SELECT * FROM "${table}" LIMIT ${limit}`);
     return NextResponse.json({ rows });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || "Erro" }, { status: 500 });

@@ -72,7 +72,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
         }
     }
 
-    function guessCulprit(inputValue: string) {
+    async function guessCulprit(inputValue: string) {
         const name = inputValue.trim();
 
         setTentativas((prev) => prev + 1);
@@ -88,7 +88,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
             return;
         }
 
-        Swal.fire({
+        const confirm = await Swal.fire({
             title: "Tem certeza?",
             text: "Você só tem uma única chance de acusar o culpado!",
             icon: "question",
@@ -99,33 +99,53 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
             color: "#fff",
             confirmButtonColor: "#4f46e5",
             cancelButtonColor: "#6b7280",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                if (name.toLowerCase() === "hugo martins") {
-                    setTentativaErrada(false);
-                    setTentativaCerta(true);
-                    Swal.fire({
-                        title: "Correto!",
-                        text: "Você encontrou o culpado pelo roubo do Diamante do Amanhecer!",
-                        icon: "success",
-                        background: "#2b2e36",
-                        color: "#fff",
-                        confirmButtonColor: "#4f46e5",
-                    });
-                } else {
-                    setTentativaErrada(true);
-                    setTentativaCerta(false);
-                    Swal.fire({
-                        title: "Incorreto!",
-                        text: "O culpado saiu impune desta vez.",
-                        icon: "error",
-                        background: "#2b2e36",
-                        color: "#fff",
-                        confirmButtonColor: "#4f46e5",
-                    });
-                }
-            }
         });
+        if (!confirm.isConfirmed) return;
+
+        try {
+            const res = await fetch("/api/accuse", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                throw new Error(data?.error || "Falha ao verificar acusação");
+            }
+
+            if (data?.correct) {
+                setTentativaErrada(false);
+                setTentativaCerta(true);
+                Swal.fire({
+                    title: "Correto!",
+                    text: "Você encontrou o culpado pelo roubo do Diamante do Amanhecer!",
+                    icon: "success",
+                    background: "#2b2e36",
+                    color: "#fff",
+                    confirmButtonColor: "#4f46e5",
+                });
+            } else {
+                setTentativaErrada(true);
+                setTentativaCerta(false);
+                Swal.fire({
+                    title: "Incorreto!",
+                    text: "O culpado saiu impune desta vez.",
+                    icon: "error",
+                    background: "#2b2e36",
+                    color: "#fff",
+                    confirmButtonColor: "#4f46e5",
+                });
+            }
+        } catch (e: any) {
+            Swal.fire({
+                title: "Erro",
+                text: e?.message || "Não foi possível verificar a acusação.",
+                icon: "error",
+                background: "#2b2e36",
+                color: "#fff",
+                confirmButtonColor: "#4f46e5",
+            });
+        }
     }
 
     // Índices das sections no carrossel

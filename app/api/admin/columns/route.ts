@@ -8,14 +8,19 @@ export async function GET(request: Request) {
     if (!table) {
       return NextResponse.json({ error: "Tabela não informada" }, { status: 400 });
     }
-    const rows = await execute(
-      `SELECT column_name, data_type, is_nullable, column_key, extra
-       FROM information_schema.columns
-       WHERE table_schema = DATABASE() AND table_name = ?
-       ORDER BY ordinal_position`,
-      [table]
-    );
-    return NextResponse.json({ columns: rows });
+
+    // PRAGMA table_info retorna: cid, name, type, notnull (0/1), dflt_value, pk (0/1)
+    const pragmaRows = await execute(`PRAGMA table_info("${table.replace(/"/g, '""')}")`);
+
+    const columns = (pragmaRows || []).map((r: any) => ({
+      column_name: r.name as string,
+      data_type: (r.type as string) || "",
+      is_nullable: r.notnull ? "NO" : "YES",
+      column_key: r.pk ? "PRI" : "",
+      extra: r.pk ? "auto_increment" : "",
+    }));
+
+    return NextResponse.json({ columns });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || "Erro" }, { status: 500 });
   }

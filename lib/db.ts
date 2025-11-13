@@ -1,29 +1,37 @@
-import { createPool, type Pool } from 'mysql2/promise';
+import { createClient, type Client } from '@libsql/client';
 
 declare global {
-  // Evita recriar pool em HMR no Next.js
-  // eslint-disable-next-line no-var
-  var mysqlPool: Pool | undefined;
+	// eslint-disable-next-line no-var
+	var libsqlClient: Client | undefined;
 }
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL não definido nas variáveis de ambiente');
+const tursoUrl = process.env.TURSO_DB_URL || process.env.DATABASE_URL;
+const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
+
+if (!tursoUrl) {
+	throw new Error('TURSO_DB_URL ou DATABASE_URL não definido nas variáveis de ambiente');
 }
 
-const pool: Pool = globalThis.mysqlPool || createPool(databaseUrl);
+const client: Client =
+	globalThis.libsqlClient ||
+	createClient({
+		url: tursoUrl,
+		authToken: tursoAuthToken,
+	});
+
 if (process.env.NODE_ENV !== 'production') {
-  globalThis.mysqlPool = pool;
+	globalThis.libsqlClient = client;
 }
 
 export async function queryRaw(sql: string): Promise<any[]> {
-  const [rows] = await pool.query(sql);
-  return rows as any[];
+	const res = await client.execute(sql);
+	// libSQL retorna rows em formato array-like; normalizamos para array simples
+	return (res.rows as unknown as any[]) ?? [];
 }
 
 export async function execute(sql: string, params: any[] = []): Promise<any[]> {
-  const [rows] = await pool.execute(sql, params);
-  return rows as any[];
+	const res = await client.execute({ sql, args: params });
+	return (res.rows as unknown as any[]) ?? [];
 }
 
 

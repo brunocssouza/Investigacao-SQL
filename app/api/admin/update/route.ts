@@ -21,11 +21,20 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Nenhuma alteração" }, { status: 400 });
     }
 
-    const sets = entries.map(([k]) => `\`${k}\` = ?`).join(", ");
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(table) || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(pk)) {
+      return NextResponse.json({ error: "Identificadores inválidos" }, { status: 400 });
+    }
+    for (const [k] of entries) {
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(k)) {
+        return NextResponse.json({ error: `Coluna inválida: ${k}` }, { status: 400 });
+      }
+    }
+
+    const sets = entries.map(([k]) => `"${k}" = ?`).join(", ");
     const values = entries.map(([, v]) => v);
     values.push(id);
 
-    await execute(`UPDATE \`${table}\` SET ${sets} WHERE \`${pk}\` = ?`, values);
+    await execute(`UPDATE "${table}" SET ${sets} WHERE "${pk}" = ?`, values);
     return NextResponse.json({ ok: true });
   } catch (err: any) {
     return NextResponse.json({ error: err?.message || "Erro" }, { status: 500 });
