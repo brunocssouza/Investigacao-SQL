@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { JSX, useMemo, useState } from "react";
+import { JSX, useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 type Row = Record<string, unknown>;
@@ -13,12 +13,26 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [dicas, setDicas] = useState(false);
-    const [tentativaErrada, setTentativaErrada] = useState(false);
     const [tentativaCerta, setTentativaCerta] = useState(false)
     const [tentativas, setTentativas] = useState(0)
     const [activeSection, setActiveSection] = useState<number>(0);
     const [showAccuseModal, setShowAccuseModal] = useState(false);
     const [suspectName, setSuspectName] = useState("");
+    const [notes, setNotes] = useState("");
+
+    // Persiste anotações entre trocas de seção e recarregamentos
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("game_notes");
+            if (saved != null) setNotes(saved);
+        } catch {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    useEffect(() => {
+        try {
+            localStorage.setItem("game_notes", notes);
+        } catch {}
+    }, [notes]);
 
     const columns = useMemo(() => {
         if (!rows || rows.length === 0) return [] as string[];
@@ -114,7 +128,6 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
             }
 
             if (data?.correct) {
-                setTentativaErrada(false);
                 setTentativaCerta(true);
                 Swal.fire({
                     title: "Correto!",
@@ -125,7 +138,6 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                     confirmButtonColor: "#4f46e5",
                 });
             } else {
-                setTentativaErrada(true);
                 setTentativaCerta(false);
                 Swal.fire({
                     title: "Incorreto!",
@@ -173,7 +185,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                                 <span className="dateline">15 de setembro de 2025</span> · Redator: <span>Bruno César Silva de Souza</span>
                             </div>
                             <h2 className="text-5xl font-bold my-8 text-center">Museu atacado!</h2>
-                            <p className="newspaper-lead drop-cap newspaper-columns pb-8 text-justify">
+                            <p className="md:text-4xl drop-cap newspaper-columns pb-8 text-justify text-md">
                                 Na madrugada do dia de hoje, o museu
                                 “Aurora Arte & História” sofreu um furto — onde nenhum alarme soou — de um de seus itens
                                 {hardMode ? " mas nada mais de importância foi divulgado para a imprensa" : ": o Diamante do Amanhecer, uma joia lendária recém-chegada de uma exposição internacional"}.
@@ -187,7 +199,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                         <div >
                             <h2 className="mb-2 font-bold text-2xl border-b-2">Seu Objetivo</h2>
                             <p className="text-xl mb-2 text-justify">
-                                Como um detetive {hardMode ? "experiente" : "novato"}, seu objetivo neste caso, a partir das informações da manchete, é <strong>descobrir o culpado</strong> pelo crime ocorrido no museu.
+                                <strong>Principal: </strong>Como um detetive {hardMode ? "experiente" : "novato"}, seu objetivo neste caso, a partir das informações da manchete, é <strong>descobrir o culpado</strong> pelo crime ocorrido no museu.
                                 Fique atento em todos os detalhes fornecidos nas tabelas e depoimentos, pois eles serão cruciais para desvendar o mistério. Há diversas formas de abordar a investigação, então use seu raciocínio lógico e habilidades analíticas para conectar as pistas e chegar à verdade.
                             </p>
                             <p className="text-xl text-justify">
@@ -249,8 +261,8 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
 
     function renderNotesSection(): JSX.Element {
         return (
-            <section className="w-full px-1 md:px-2">
-                <div className="newspaper  w-full p-6 md:p-10 space-y-6 text-lg md:text-xl">
+            <section className="w-screen px-1 md:px-2">
+                <div className="newspaper w-full p-6 md:p-10 space-y-6 text-lg md:text-xl">
                     <h2 className="mb-2 font-bold text-2xl">Bloco de Anotações</h2>
                     <p className="mb-3">
                         Utilize este espaço para anotar pistas, hipóteses e conexões que encontrar.
@@ -258,6 +270,8 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                     <textarea
                         rows={20}
                         placeholder="Digite suas anotações aqui."
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
                         className="border-gray-400 border-2 mb-3 w-full font-mono p-3 text-base md:text-lg"
                     />
                 </div>
@@ -267,7 +281,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
 
     function renderConsoleSection(): JSX.Element {
         return (
-            <section className="w-full px-1 md:px-2">
+            <section className="w-screen px-1 md:px-2">
                 <div className="newspaper newspaper-section w-full p-6 md:p-10 flex flex-col text-lg md:text-xl space-y-4">
                     <h2 className="mb-2 font-bold text-2xl">Exemplos de Consultas</h2>
                     <p className="mb-3">Somente consultas SELECT simples são permitidas.</p>
@@ -418,7 +432,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
             </div>
 
             {/* Navegação flutuante */}
-            <nav className="fixed left-1/2 -translate-x-1/2 bottom-28 md:left-auto md:right-6 md:bottom-auto md:top-1/2 md:-translate-y-1/2 z-50 flex flex-wrap gap-3 md:flex-col px-2">
+            <nav className="fixed left-1/2 -translate-x-1 bottom-28 md:left-auto md:right-6 md:bottom-auto md:top-1/6 md:-translate-y-1/2 z-50 flex flex-wrap gap-3 md:flex-col px-2">
                 {[
                     { label: "Introdução", idx: SECTION_INDEX.NEWSPAPER },
                     { label: "Bloco de Anotações", idx: SECTION_INDEX.NOTES },
