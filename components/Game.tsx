@@ -326,6 +326,14 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                         id="consulta-input"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                if (!loading && query.trim().length > 0) {
+                                    run();
+                                }
+                            }
+                        }}
                         rows={8}
                         placeholder="Escreva sua consulta aqui"
                         className="newspaper-textarea mb-3 w-full font-mono p-3 text-base md:text-lg"
@@ -422,7 +430,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
     }
 
     return (
-        <div className="mx-auto pt-12 pb-8 relative bg-cover bg-center min-h-screen overflow-x-hidden" style={{ backgroundImage: 'url("/newspaper.png")' }}>
+        <div className="mx-auto pt-9 pb-0 md:pb-8 relative bg-cover bg-center min-h-screen overflow-x-hidden" style={{ backgroundImage: 'url("/newspaper.png")' }}>
             
             {/* Barra fixa de dificuldade no topo */}
             <div
@@ -431,8 +439,8 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                 {`${hardMode ? "Dificuldade: Sherlock Holmes" : "Dificuldade: Detetive Novato"}${tentativaCerta ? " - Você acertou o culpado! Tentativas: " + tentativas : ""}`}
             </div>
 
-            {/* Navegação flutuante */}
-            <nav className="fixed left-1/2 -translate-x-1 bottom-28 md:left-auto md:right-6 md:bottom-auto md:top-1/6 md:-translate-y-1/2 z-50 flex flex-wrap gap-3 md:flex-col px-2">
+            {/* Navegação (mobile: não fixa; desktop: fixa lateral) */}
+            <nav className="relative mt-3 z-40 flex flex-wrap gap-3 px-2 justify-center md:justify-end md:mt-0 md:fixed md:right-6 md:top-1/2 md:-translate-y-1/2 md:flex-col">
                 {[
                     { label: "Introdução", idx: SECTION_INDEX.NEWSPAPER },
                     { label: "Bloco de Anotações", idx: SECTION_INDEX.NOTES },
@@ -451,7 +459,7 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                                 el?.focus();
                             }
                         }}
-                        className={`float-nav-btn ${activeSection === b.idx ? "active" : ""}`}
+                        className={`float-nav-btn flex-1 ${activeSection === b.idx ? "active" : ""}`}
                     >
                         {b.label}
                     </button>

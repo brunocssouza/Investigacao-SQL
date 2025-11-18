@@ -19,11 +19,11 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${inter.className} app-bg text-slate-100 antialiased`}>
 
 
-        <main className="pb-16 sm:pb-0">
+        <main className="md:pb-16 pb-0">
           {children}
         </main>
 
-        <footer className="fixed bottom-0 w-full border-t border-white/10 bg-slate-800 backdrop-blur supports-backdrop-filter:bg-slate-800">
+        <footer className="w-full border-t border-white/10 bg-slate-800 backdrop-blur supports-backdrop-filter:bg-slate-800 md:fixed md:bottom-0">
           <div className="mx-auto flex flex-wrap items-center justify-center sm:justify-between px-4 py-3 gap-4">
             <div className="text-xs sm:text-sm text-white ">
               Caso encontre dificuldades, você pode pedir auxílio para um dos orientadores.
@@ -39,6 +39,20 @@ export default function RootLayout({
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
                   <path d="M20.447 20.452H17.21v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.447-2.136 2.943v5.663H9.086V9h3.111v1.561h.045c.434-.822 1.494-1.69 3.073-1.69 3.287 0 3.894 2.164 3.894 4.98v6.601zM5.337 7.433a1.81 1.81 0 1 1 0-3.62 1.81 1.81 0 0 1 0 3.62zM6.9 20.452H3.77V9H6.9v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.instagram.com/brunocssouza/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram de Bruno Souza"
+                className="inline-flex items-center justify-center rounded-md p-2 text-white hover:text-white hover:bg-white/10 transition-colors"
+                title="Instagram"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true">
+                  <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10z"/>
+                  <path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                  <circle cx="17.5" cy="6.5" r="1.5"/>
                 </svg>
               </a>
               <a

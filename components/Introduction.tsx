@@ -7,6 +7,7 @@ import ShowWinners from "./ShowWinners";
 export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolean) => void }) {
 
     const [difficultyModal, setDifficultyModal] = useState(false)
+    const [showDifficulty, setShowDifficulty] = useState(false)
     const [showWinners, setShowWinners] = useState(false);
 
     // Oculta o footer enquanto a introdução estiver visível
@@ -36,7 +37,7 @@ export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolea
                 <h2 className="font-bold text-xl sm:text-2xl text-center" style={{color: '#fff'}}>Pronto para começar?</h2>
                 <button
                     className="group px-10 py-3 mb-4 rounded-md bg-amber-500 text-white font-semibold hover:scale-105 hover:bg-white hover:text-black hover:border transition-transform duration-300 inline-flex items-center"
-                    onClick={() => setDifficultyModal(!difficultyModal)}
+                    onClick={() => { setShowDifficulty(false); setDifficultyModal(!difficultyModal); }}
                 >
                     <span>Jogar</span>
                     <span className="ml-2 inline-block transition-all duration-300 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0">
@@ -44,7 +45,7 @@ export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolea
                     </span>
                 </button>
 
-                {/* Ícones grandes GitHub e LinkedIn */}
+                {/* Ícones grandes GitHub, LinkedIn e Instagram */}
                 <div className="flex items-center gap-6 mb-6">
                     <a
                         href="https://github.com/brunocssouza"
@@ -70,6 +71,20 @@ export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolea
                             <path d="M20.447 20.452H17.21v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.447-2.136 2.943v5.663H9.086V9h3.111v1.561h.045c.434-.822 1.494-1.69 3.073-1.69 3.287 0 3.894 2.164 3.894 4.98v6.601zM5.337 7.433a1.81 1.81 0 1 1 0-3.62 1.81 1.81 0 0 1 0 3.62zM6.9 20.452H3.77V9H6.9v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                         </svg>
                     </a>
+                    <a
+                        href="https://www.instagram.com/brunocssouza/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                        className="text-white/90 hover:text-white transition-colors"
+                        title="Instagram"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10z"/>
+                            <path d="M12 7a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6z"/>
+                            <circle cx="17.5" cy="6.5" r="1.5"/>
+                        </svg>
+                    </a>
                 </div>
 
                 <button className="underline" onClick={() => setShowWinners(!showWinners)}>
@@ -87,41 +102,102 @@ export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolea
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="difficulty-title"
-                    onClick={() => setDifficultyModal(!difficultyModal)}
+                    onClick={() => { setDifficultyModal(false); setShowDifficulty(false); }}
                 >
                     <div
                         className="w-full max-w-3xl rounded-lg bg-white text-black shadow-[0_0_30px_-10px_rgba(0,0,0,0.6)]"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between px-6 py-4 border-b">
-                            <h4 id="difficulty-title" className="font-semibold text-xl">Escolha a dificuldade</h4>
-                            <button
-                                className="rounded-md px-3 py-1 text-sm border hover:bg-black hover:text-white transition-colors"
-                                onClick={() => setDifficultyModal(!difficultyModal)}
-                                aria-label="Fechar modal"
-                            >
-                                Fechar
-                            </button>
-                        </div>
-
-                        <div className="p-6">
-                            <div className="flex flex-col md:flex-row gap-6 justify-center text-2xl font-medium">
-                                <button
-                                    className="flex-1 px-6 py-8 shadow-md bg-amber-400 text-black font-bold rounded-md hover:scale-105 duration-300 hover:bg-white hover:border hover:text-black transition-transform text-left"
-                                    onClick={() => { onSubmit(false); }}
-                                >
-                                    Detetive Novato
-                                    <p className="text-base font-light mt-2">Você terá dicas e exemplos para te guiar.</p>
-                                </button>
-                                <button
-                                    className="flex-1 px-6 py-8 shadow-md bg-red-600 text-white font-bold rounded-md hover:scale-105 duration-300 hover:bg-white hover:border hover:text-black transition-transform text-left"
-                                    onClick={() => onSubmit(true)}
-                                >
-                                    Sherlock Holmes
-                                    <p className="text-base font-light mt-2">Boa sorte.</p>
-                                </button>
-                            </div>
-                        </div>
+                        {!showDifficulty ? (
+                            <>
+                                <div className="flex items-center justify-between px-6 py-4 border-b">
+                                    <h4 id="difficulty-title" className="font-semibold text-xl">Escolha o jogo</h4>
+                                    <button
+                                        className="rounded-md px-3 py-1 text-sm border hover:bg-black hover:text-white transition-colors"
+                                        onClick={() => { setDifficultyModal(false); setShowDifficulty(false); }}
+                                        aria-label="Fechar modal"
+                                    >
+                                        Fechar
+                                    </button>
+                                </div>
+                                <div className="p-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {/* Card 1: Furto do Museu */}
+                                        <div className="rounded-lg border p-5 hover:shadow-md transition-shadow relative">
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <img src="/diamante.png" alt="Diamante" className="h-10 w-10 object-contain" />
+                                                <div>
+                                                    <p className="font-semibold text-lg">Furto do Museu</p>
+                                                    <p className="text-sm text-slate-600">Investigue usando SQL para encontrar o culpado.</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                className="mt-2 inline-flex px-4 py-2 rounded-md bg-amber-500 text-white font-semibold hover:brightness-110 transition-colors"
+                                                onClick={() => setShowDifficulty(true)}
+                                            >
+                                                Selecionar
+                                            </button>
+                                        </div>
+                                        {/* Card 2: Disarme a Bomba */}
+                                        <div className="rounded-lg border p-5 opacity-80 relative overflow-hidden">
+                                            <span className="absolute top-3 left-3 bg-black text-white text-xs px-2 py-1 rounded">Em desenvolvimento</span>
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <div className="h-10 w-10 rounded bg-slate-200" />
+                                                <div>
+                                                    <p className="font-semibold text-lg">Disarme a Bomba</p>
+                                                    <p className="text-sm text-slate-600">Desarme a bomba antes que o tempo acabe.</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                className="mt-2 inline-flex px-4 py-2 rounded-md bg-slate-300 text-slate-600 font-semibold cursor-not-allowed"
+                                                disabled
+                                            >
+                                                Em breve
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="flex items-center justify-between px-6 py-4 border-b">
+                                    <h4 id="difficulty-title" className="font-semibold text-xl">Escolha a dificuldade</h4>
+                                    <button
+                                        className="rounded-md px-3 py-1 text-sm border hover:bg-black hover:text-white transition-colors"
+                                        onClick={() => { setDifficultyModal(false); setShowDifficulty(false); }}
+                                        aria-label="Fechar modal"
+                                    >
+                                        Fechar
+                                    </button>
+                                </div>
+                                <div className="p-6">
+                                    <div className="flex flex-col md:flex-row gap-6 justify-center text-2xl font-medium">
+                                        <button
+                                            className="flex-1 px-6 py-8 shadow-md bg-amber-400 text-black font-bold rounded-md hover:scale-105 duration-300 hover:bg-white hover:border hover:text-black transition-transform text-left"
+                                            onClick={() => { onSubmit(false); }}
+                                        >
+                                            Detetive Novato
+                                            <p className="text-base font-light mt-2">Você terá dicas e exemplos para te guiar.</p>
+                                        </button>
+                                        <button
+                                            className="flex-1 px-6 py-8 shadow-md bg-red-600 text-white font-bold rounded-md hover:scale-105 duration-300 hover:bg-white hover:border hover:text-black transition-transform text-left"
+                                            onClick={() => onSubmit(true)}
+                                        >
+                                            Sherlock Holmes
+                                            <p className="text-base font-light mt-2">Boa sorte.</p>
+                                        </button>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <button
+                                            className="text-sm underline text-slate-600 hover:text-black"
+                                            onClick={() => setShowDifficulty(false)}
+                                        >
+                                            Voltar para seleção de jogo
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}
