@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { JSX, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 
 type Row = Record<string, unknown>;
