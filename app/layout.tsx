@@ -19,13 +19,13 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${inter.className} app-bg text-slate-100 antialiased`}>
 
 
-        <main className="">
+        <main className="pb-16 sm:pb-0">
           {children}
         </main>
 
-        <footer className="fixed bottom-0 w-full border-t border-white/10 bg-slate-900/60 backdrop-blur supports-backdrop-filter:bg-slate-900/40">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 gap-4">
-            <div className="text-sm text-white">
+        <footer className="fixed bottom-0 w-full border-t border-white/10 bg-slate-800 backdrop-blur supports-backdrop-filter:bg-slate-800">
+          <div className="mx-auto flex flex-wrap items-center justify-center sm:justify-between px-4 py-3 gap-4">
+            <div className="text-xs sm:text-sm text-white ">
               Caso encontre dificuldades, você pode pedir auxílio para um dos orientadores.
             </div>
             <div className="flex items-center gap-2">

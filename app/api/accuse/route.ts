@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
 	try {
@@ -9,16 +8,16 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: "Nome inválido" }, { status: 400 });
 		}
 
-		const hash = process.env.CULPRIT_HASH;
-		if (!hash) {
+		const configuredName = process.env.CULPRIT_NAME || "Hugo Martins";
+		if (!configuredName) {
 			return NextResponse.json(
-				{ error: "CULPRIT_HASH não configurado no servidor" },
+				{ error: "CULPRIT_NAME não configurado no servidor" },
 				{ status: 500 }
 			);
 		}
 
-		const normalized = name.trim().toLowerCase();
-		const ok = await bcrypt.compare(normalized, hash);
+		const normalize = (s: string) => s.trim().toLowerCase();
+		const ok = normalize(name) === normalize(configuredName);
 		return NextResponse.json({ correct: ok });
 	} catch (err: any) {
 		return NextResponse.json(

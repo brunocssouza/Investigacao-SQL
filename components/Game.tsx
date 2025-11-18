@@ -155,8 +155,260 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
         CONSOLE: 2
     } as const;
 
+    // Renderizadores de seção (reutilizados em desktop e mobile)
+    function renderNewspaperSection(): JSX.Element {
+        return (
+            <section className="w-full px-1 md:px-2">
+                <div className="newspaper newspaper-section w-full space-y-8 p-6 md:p-10 text-lg md:text-xl">
+                    <div className="flex flex-col justify-center items-center gap-4">
+                        <img
+                            src="/diamante.png"
+                            alt="Diamante do Amanhecer"
+                            className="max-h-48 max-w-48"
+                        />
+
+                        <div className="px-2 md:px-8 py-6 md:py-8">
+                            <h1 className="newspaper-title text-4xl md:text-5xl">Jornal de Hoje</h1>
+                            <div className="byline text-center mb-2">
+                                <span className="dateline">15 de setembro de 2025</span> · Redator: <span>Bruno César Silva de Souza</span>
+                            </div>
+                            <h2 className="text-5xl font-bold my-8 text-center">Museu atacado!</h2>
+                            <p className="newspaper-lead drop-cap newspaper-columns pb-8 text-justify">
+                                Na madrugada do dia de hoje, o museu
+                                “Aurora Arte & História” sofreu um furto — onde nenhum alarme soou — de um de seus itens
+                                {hardMode ? " mas nada mais de importância foi divulgado para a imprensa" : ": o Diamante do Amanhecer, uma joia lendária recém-chegada de uma exposição internacional"}.
+                                A peça desapareceu {hardMode ? "de uma das salas" : "da Sala de Tesouros entre 02h e 03h da manhã. Acreditam que saber quais funcionários tinham acesso a sala que sofreu o furto é o ponto de partida pra descobrir o mistério"}.
+                                <br />
+                                {hardMode ? "" : "A investigação interna indica que um funcionário do museu foi o responsável — alguém com acesso restrito, conhecimento técnico e um álibi falso."}
+                            </p>
+                        </div>
+                    </div>
+                    <div className=" p-4 md:p-5">
+                        <div >
+                            <h2 className="mb-2 font-bold text-2xl border-b-2">Seu Objetivo</h2>
+                            <p className="text-xl mb-2 text-justify">
+                                Como um detetive {hardMode ? "experiente" : "novato"}, seu objetivo neste caso, a partir das informações da manchete, é <strong>descobrir o culpado</strong> pelo crime ocorrido no museu.
+                                Fique atento em todos os detalhes fornecidos nas tabelas e depoimentos, pois eles serão cruciais para desvendar o mistério. Há diversas formas de abordar a investigação, então use seu raciocínio lógico e habilidades analíticas para conectar as pistas e chegar à verdade.
+                            </p>
+                            <p className="text-xl text-justify">
+                                <strong>Bônus: </strong>Após solucionar o caso, caso você apresente ao menos <strong>5 justificativas válidas</strong> para sua acusação e seja de seu interesse, você poderá <strong>submeter seu nome ao Hall dos Detetives</strong> e eternizar sua façanha!
+                            </p>
+                        </div>
+
+                    </div>
+                    <div className=" p-4 md:p-5">
+                        <h2 className="mb-2 font-bold text-2xl border-b-2">Informações do Banco de Dados</h2>
+                        <div className=" p-4 md:p-5 flex flex-col md:flex-row md:space-x-12 space-y-8 md:space-y-0 justify-center w-full">
+
+                            {!hardMode && (
+                                <div className="w-full md:w-auto">
+                                    <h2 className="mb-2 font-bold text-xl border-b-2">Diagrama</h2>
+                                    <Image
+                                        src="/Modelo DER - O Roubo do Diamante do Amanhecer.png"
+                                        width={1000}
+                                        height={600}
+                                        alt="Modelo DER"
+                                        className="w-full h-auto max-w-3xl"
+                                    />
+                                </div>
+                            )}
+
+
+                            <div className="w-full md:w-auto">
+                                <h2 className="mb-2 font-bold text-xl border-b-2">Descrições das tabelas</h2>
+                                <ul className="space-y-1 text-xl">
+                                    <li>
+                                        <strong>funcionarios</strong> — Identifica cada funcionário e cargo.
+                                    </li>
+                                    <li>
+                                        <strong>salas</strong> — Mostra as localizações e nomes das áreas.
+                                    </li>
+                                    <li>
+                                        <strong>obras</strong> — Registra as peças do museu.
+                                    </li>
+                                    <li>
+                                        <strong>acessos</strong> — Registra horários e locais de entrada/saída.
+                                    </li>
+                                    <li>
+                                        <strong>movimentacoes</strong> — Mostra quando itens foram movidos ou manipulados.
+                                    </li>
+                                    <li>
+                                        <strong>depoimentos</strong> — Declarações dos funcionários.
+                                    </li>
+                                    <li>
+                                        <strong>permissoes</strong> — Que funcionario tem permissao a qual sala.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    function renderNotesSection(): JSX.Element {
+        return (
+            <section className="w-full px-1 md:px-2">
+                <div className="newspaper  w-full p-6 md:p-10 space-y-6 text-lg md:text-xl">
+                    <h2 className="mb-2 font-bold text-2xl">Bloco de Anotações</h2>
+                    <p className="mb-3">
+                        Utilize este espaço para anotar pistas, hipóteses e conexões que encontrar.
+                    </p>
+                    <textarea
+                        rows={20}
+                        placeholder="Digite suas anotações aqui."
+                        className="border-gray-400 border-2 mb-3 w-full font-mono p-3 text-base md:text-lg"
+                    />
+                </div>
+            </section>
+        );
+    }
+
+    function renderConsoleSection(): JSX.Element {
+        return (
+            <section className="w-full px-1 md:px-2">
+                <div className="newspaper newspaper-section w-full p-6 md:p-10 flex flex-col text-lg md:text-xl space-y-4">
+                    <h2 className="mb-2 font-bold text-2xl">Exemplos de Consultas</h2>
+                    <p className="mb-3">Somente consultas SELECT simples são permitidas.</p>
+
+                    <div>
+                        <button onClick={() => setDicas(!dicas)} className="newspaper-button mt-1 mb-4">
+                            {dicas ? "Ocultar exemplos" : "Ver exemplos"}
+                        </button>
+                        {dicas && (
+                            <div className="mt-2 space-y-4">
+                                <p className="mb-3 font-semibold">Exemplos de consultas</p>
+                                {examples.map((ex, i) => (
+                                    <div
+                                        key={i}
+                                        className="grid gap-2 md:grid-cols-2 newspaper-card p-4"
+                                    >
+                                        <div className="mb-1 font-semibold">{ex.title}</div>
+                                        {ex.hint && (
+                                            <div className="mb-2 text-sm">{ex.hint}</div>
+                                        )}
+                                        <pre className="newspaper-pre text-xs">{ex.sql}</pre>
+                                        <button
+                                            onClick={() => {
+                                                setQuery(ex.sql);
+                                                setActiveSection(SECTION_INDEX.CONSOLE);
+                                                const el = document.getElementById("consulta-input") as HTMLTextAreaElement | null;
+                                                el?.focus();
+                                            }}
+                                            disabled={loading}
+                                            className="newspaper-button"
+                                        >
+                                            Usar query
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <h3 className="font-bold">Console de Consultas</h3>
+                    <textarea
+                        id="consulta-input"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        rows={8}
+                        placeholder="Escreva sua consulta aqui"
+                        className="newspaper-textarea mb-3 w-full font-mono p-3 text-base md:text-lg"
+                    />
+                    <div className="flex items-center gap-3 mb-2">
+                        <button
+                            onClick={run}
+                            disabled={loading}
+                            className="newspaper-button w-fit"
+                        >
+                            {loading ? (
+                                <>
+                                    <svg
+                                        className="h-4 w-4 animate-spin mr-2"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        aria-hidden
+                                    >
+                                        <circle
+                                            className="opacity-20"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        />
+                                        <path
+                                            className="opacity-90"
+                                            d="M4 12a8 8 0 018-8"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                            strokeLinecap="round"
+                                        />
+                                    </svg>
+                                    Executando...
+                                </>
+                            ) : (<>Executar Consulta</>)}
+                        </button>
+                        <button
+                            onClick={() => setShowAccuseModal(true)}
+                            className="newspaper-button secondary w-fit"
+                        >
+                            Acusar um Suspeito
+                        </button>
+                    </div>
+                    {error && (
+                        <div className=" text-red-400" aria-live="polite">
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="mt-6">
+                        {!rows ? (
+                            <div className="text-black">Execute uma consulta para ver os resultados aqui.</div>
+                        ) : rows.length === 0 ? (
+                            <div className="text-black">Nenhum resultado.</div>
+                        ) : (
+                            <div className="overflow-hidden">
+                                <div className="max-h-[500px] overflow-auto">
+                                    <table className="newspaper-table">
+                                        <caption className="mb-2">
+                                            Resultado da Consulta
+                                        </caption>
+                                        <thead>
+                                            <tr>
+                                                {columns.map((c) => (
+                                                    <th key={c}>
+                                                        {c}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {rows.map((r, idx) => (
+                                                <tr key={idx}>
+                                                    {columns.map((c) => (
+                                                        <td key={c}>
+                                                            {formatCell(r[c])}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                </div>
+            </section>
+        );
+    }
+
     return (
-        <div className="mx-auto pt-12 pb-8 relative bg-cover bg-center min-h-screen" style={{ backgroundImage: 'url("/newspaper.png")' }}>
+        <div className="mx-auto pt-12 pb-8 relative bg-cover bg-center min-h-screen overflow-x-hidden" style={{ backgroundImage: 'url("/newspaper.png")' }}>
             
             {/* Barra fixa de dificuldade no topo */}
             <div
@@ -165,8 +417,8 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                 {`${hardMode ? "Dificuldade: Sherlock Holmes" : "Dificuldade: Detetive Novato"}${tentativaCerta ? " - Você acertou o culpado! Tentativas: " + tentativas : ""}`}
             </div>
 
-            {/* Navegação flutuante à direita */}
-            <nav className="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+            {/* Navegação flutuante */}
+            <nav className="fixed left-1/2 -translate-x-1/2 bottom-28 md:left-auto md:right-6 md:bottom-auto md:top-1/2 md:-translate-y-1/2 z-50 flex flex-wrap gap-3 md:flex-col px-2">
                 {[
                     { label: "Introdução", idx: SECTION_INDEX.NEWSPAPER },
                     { label: "Bloco de Anotações", idx: SECTION_INDEX.NOTES },
@@ -180,6 +432,9 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                             setActiveSection(b.idx);
                             if (b.idx === SECTION_INDEX.NOTES) {
                                 window.scrollTo({ top: 0, behavior: "smooth" });
+                            } else if (b.idx === SECTION_INDEX.CONSOLE) {
+                                const el = document.getElementById("consulta-input") as HTMLTextAreaElement | null;
+                                el?.focus();
                             }
                         }}
                         className={`float-nav-btn ${activeSection === b.idx ? "active" : ""}`}
@@ -189,256 +444,11 @@ export default function Game({ hardMode = false }: { hardMode: boolean }) {
                 ))}
             </nav>
 
-            {/* Trilho carrossel */}
-            <div className="relative overflow-hidden">
-                <div
-                    className="flex transition-transform duration-700 ease-in-out"
-                    style={{ transform: `translateX(-${activeSection * 100}%)` }}
-                >
-                    {/* 1 - Jornal (realista) */}
-                    <section className="w-full shrink-0 px-1 md:px-2">
-                        <div className="newspaper newspaper-section w-full space-y-8 p-6 md:p-10 text-lg md:text-xl">
-                            <div className="flex flex-col justify-center items-center gap-4">
-                                <img
-                                    src="/diamante.png"
-                                    alt="Diamante do Amanhecer"
-                                    className="max-h-48 max-w-48"
-                                />
-
-                                <div className="px-2 md:px-8 py-6 md:py-8">
-                                    <h1 className="newspaper-title text-4xl md:text-5xl">Jornal de Hoje</h1>
-                                    <div className="byline text-center mb-2">
-                                        <span className="dateline">15 de setembro de 2025</span> · Redator: <span>Bruno César Silva de Souza</span>
-                                    </div>
-                                    <h2 className="text-5xl font-bold my-8 text-center">Museu atacado!</h2>
-                                    <p className="newspaper-lead drop-cap newspaper-columns pb-8 text-justify">
-                                        Na madrugada do dia de hoje, o museu
-                                        “Aurora Arte & História” sofreu um furto — onde nenhum alarme soou — de um de seus itens
-                                        {hardMode ? " mas nada mais de importância foi divulgado para a imprensa" : ": o Diamante do Amanhecer, uma joia lendária recém-chegada de uma exposição internacional"}.
-                                        A peça desapareceu {hardMode ? "de uma das salas" : "da Sala de Tesouros entre 02h e 03h da manhã. Acreditam que saber quais funcionários tinham acesso a sala que sofreu o furto é o ponto de partida pra descobrir o mistério"}.
-                                        <br />
-                                        {hardMode ? "" : "A investigação interna indica que um funcionário do museu foi o responsável — alguém com acesso restrito, conhecimento técnico e um álibi falso."}
-                                    </p>
-                                </div>
-                            </div>
-                            <div className=" p-4 md:p-5">
-                                <div >
-                                    <h2 className="mb-2 font-bold text-2xl border-b-2">Seu Objetivo</h2>
-                                    <p className="text-xl mb-2 text-justify">
-                                        Como um detetive {hardMode ? "experiente" : "novato"}, seu objetivo neste caso, a partir das informações da manchete, é <strong>descobrir o culpado</strong> pelo crime ocorrido no museu.
-                                        Fique atento em todos os detalhes fornecidos nas tabelas e depoimentos, pois eles serão cruciais para desvendar o mistério. Há diversas formas de abordar a investigação, então use seu raciocínio lógico e habilidades analíticas para conectar as pistas e chegar à verdade.
-                                    </p>
-                                    <p className="text-xl text-justify">
-                                        <strong>Bônus: </strong>Após solucionar o caso, caso você apresente ao menos <strong>5 justificativas válidas</strong> para sua acusação e seja de seu interesse, você poderá <strong>submeter seu nome ao Hall dos Detetives</strong> e eternizar sua façanha!
-                                    </p>
-                                </div>
-
-                            </div>
-                            <div className=" p-4 md:p-5">
-                                <h2 className="mb-2 font-bold text-2xl border-b-2">Informações do Banco de Dados</h2>
-                                <div className=" p-4 md:p-5 flex space-x-12 justify-center w-full">
-
-                                    {!hardMode && (
-                                        <div className="">
-                                            <h2 className="mb-2 font-bold text-xl border-b-2">Diagrama</h2>
-                                            <Image
-                                                src="/Modelo DER - O Roubo do Diamante do Amanhecer.png"
-                                                width={1000}
-                                                height={600}
-                                                alt="Modelo DER"
-                                            />
-                                        </div>
-                                    )}
-
-
-                                    <div className="">
-                                        <h2 className="mb-2 font-bold text-xl border-b-2">Descrições das tabelas</h2>
-                                        <ul className="space-y-1 text-xl">
-                                            <li>
-                                                <strong>funcionarios</strong> — Identifica cada funcionário e cargo.
-                                            </li>
-                                            <li>
-                                                <strong>salas</strong> — Mostra as localizações e nomes das áreas.
-                                            </li>
-                                            <li>
-                                                <strong>obras</strong> — Registra as peças do museu.
-                                            </li>
-                                            <li>
-                                                <strong>acessos</strong> — Registra horários e locais de entrada/saída.
-                                            </li>
-                                            <li>
-                                                <strong>movimentacoes</strong> — Mostra quando itens foram movidos ou manipulados.
-                                            </li>
-                                            <li>
-                                                <strong>depoimentos</strong> — Declarações dos funcionários.
-                                            </li>
-                                            <li>
-                                                <strong>permissoes</strong> — Que funcionario tem permissao a qual sala.
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* 2 - Anotações */}
-                    <section className="w-full shrink-0 px-1 md:px-2">
-                        <div className="newspaper  w-full p-6 md:p-10 space-y-6 text-lg md:text-xl">
-                            <h2 className="mb-2 font-bold text-2xl">Bloco de Anotações</h2>
-                            <p className="mb-3">
-                                Utilize este espaço para anotar pistas, hipóteses e conexões que encontrar.
-                            </p>
-                            <textarea
-                                rows={20}
-                                placeholder="Digite suas anotações aqui."
-                                className="border-gray-400 border-2 mb-3 w-full font-mono p-3 text-base md:text-lg"
-                            />
-                        </div>
-                    </section>
-
-                    {/* 3 - Consultas (exemplos, input e resultados) */}
-                    <section className="w-full shrink-0 px-1 md:px-2">
-                        <div className="newspaper newspaper-section w-full p-6 md:p-10 flex flex-col text-lg md:text-xl space-y-4">
-                            <h2 className="mb-2 font-bold text-2xl">Exemplos de Consultas</h2>
-                            <p className="mb-3">Somente consultas SELECT simples são permitidas.</p>
-
-                            <div>
-                                <button onClick={() => setDicas(!dicas)} className="newspaper-button mt-1 mb-4">
-                                    {dicas ? "Ocultar exemplos" : "Ver exemplos"}
-                                </button>
-                                {dicas && (
-                                    <div className="mt-2 space-y-4">
-                                        <p className="mb-3 font-semibold">Exemplos de consultas</p>
-                                        {examples.map((ex, i) => (
-                                            <div
-                                                key={i}
-                                                className="grid gap-2 md:grid-cols-2 newspaper-card p-4"
-                                            >
-                                                <div className="mb-1 font-semibold">{ex.title}</div>
-                                                {ex.hint && (
-                                                    <div className="mb-2 text-sm">{ex.hint}</div>
-                                                )}
-                                                <pre className="newspaper-pre text-xs">{ex.sql}</pre>
-                                                <button
-                                                    onClick={() => {
-                                                        setQuery(ex.sql);
-                                                        setActiveSection(SECTION_INDEX.CONSOLE);
-                                                        requestAnimationFrame(() => {
-                                                            const el = document.getElementById("consulta-input") as HTMLTextAreaElement | null;
-                                                            el?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                                            el?.focus();
-                                                        });
-                                                    }}
-                                                    disabled={loading}
-                                                    className="newspaper-button"
-                                                >
-                                                    Usar query
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-
-                            <h3 className="font-bold">Console de Consultas</h3>
-                            <textarea
-                                id="consulta-input"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                rows={8}
-                                placeholder="Escreva sua consulta aqui"
-                                className="newspaper-textarea mb-3 w-full font-mono p-3 text-base md:text-lg"
-                            />
-                            <div className="flex items-center gap-3 mb-2">
-                                <button
-                                    onClick={run}
-                                    disabled={loading}
-                                    className="newspaper-button w-fit"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <svg
-                                                className="h-4 w-4 animate-spin mr-2"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                aria-hidden
-                                            >
-                                                <circle
-                                                    className="opacity-20"
-                                                    cx="12"
-                                                    cy="12"
-                                                    r="10"
-                                                    stroke="currentColor"
-                                                    strokeWidth="4"
-                                                />
-                                                <path
-                                                    className="opacity-90"
-                                                    d="M4 12a8 8 0 018-8"
-                                                    stroke="currentColor"
-                                                    strokeWidth="4"
-                                                    strokeLinecap="round"
-                                                />
-                                            </svg>
-                                            Executando...
-                                        </>
-                                    ) : (<>Executar Consulta</>)}
-                                </button>
-                                <button
-                                    onClick={() => setShowAccuseModal(true)}
-                                    className="newspaper-button secondary w-fit"
-                                >
-                                    Acusar um Suspeito
-                                </button>
-                            </div>
-                            {error && (
-                                <div className=" text-red-400" aria-live="polite">
-                                    {error}
-                                </div>
-                            )}
-
-                            <div className="mt-6">
-                                {!rows ? (
-                                    <div className="text-black">Execute uma consulta para ver os resultados aqui.</div>
-                                ) : rows.length === 0 ? (
-                                    <div className="text-black">Nenhum resultado.</div>
-                                ) : (
-                                    <div className="overflow-hidden">
-                                        <div className="max-h-[500px] overflow-auto">
-                                            <table className="newspaper-table">
-                                                <caption className="mb-2">
-                                                    Resultado da Consulta
-                                                </caption>
-                                                <thead>
-                                                    <tr>
-                                                        {columns.map((c) => (
-                                                            <th key={c}>
-                                                                {c}
-                                                            </th>
-                                                        ))}
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {rows.map((r, idx) => (
-                                                        <tr key={idx}>
-                                                            {columns.map((c) => (
-                                                                <td key={c}>
-                                                                    {formatCell(r[c])}
-                                                                </td>
-                                                            ))}
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                        </div>
-                    </section>
-                </div>
+            {/* Conteúdo: renderização condicional universal (sem carrossel) */}
+            <div className="relative">
+                {activeSection === SECTION_INDEX.NEWSPAPER && renderNewspaperSection()}
+                {activeSection === SECTION_INDEX.NOTES && renderNotesSection()}
+                {activeSection === SECTION_INDEX.CONSOLE && renderConsoleSection()}
             </div>
 
             {/* Modal de acusação */}

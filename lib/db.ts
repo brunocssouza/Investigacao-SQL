@@ -5,17 +5,17 @@ declare global {
 	var libsqlClient: Client | undefined;
 }
 
-const tursoUrl = process.env.TURSO_DB_URL || process.env.DATABASE_URL;
+const dbUrl = process.env.DATABASE_URL;
 const tursoAuthToken = process.env.TURSO_AUTH_TOKEN;
 
-if (!tursoUrl) {
-	throw new Error('TURSO_DB_URL ou DATABASE_URL não definido nas variáveis de ambiente');
+if (!dbUrl) {
+	throw new Error('DATABASE_URL não definido nas variáveis de ambiente');
 }
 
 const client: Client =
 	globalThis.libsqlClient ||
 	createClient({
-		url: tursoUrl,
+		url: dbUrl,
 		authToken: tursoAuthToken,
 	});
 

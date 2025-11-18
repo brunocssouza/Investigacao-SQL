@@ -28,12 +28,12 @@ export default function Introduction({ onSubmit }: { onSubmit: (hardMode: boolea
                 </Link>
             </div>
             <div className="p-4 mb-12">
-                <h1 className="font-bold text-6xl text-center mb-8 py-2" style={{color: '#fff'}}>Investigação <span className="text-amber-500">SQL</span></h1>
-                <p className="text-slate-400 text-center text-xl" style={{color: '#8f8f8f'}}>Um furto ocorreu em um Museu e depende de você utilizar SQL como forma de descobrir quem foi o culpado.</p>
+                <h1 className="font-bold text-4xl sm:text-5xl md:text-6xl text-center mb-8 py-2" style={{color: '#fff'}}>Investigação <span className="text-amber-500">SQL</span></h1>
+                <p className="text-slate-400 text-center text-base sm:text-lg md:text-xl" style={{color: '#8f8f8f'}}>Um furto ocorreu em um Museu e depende de você utilizar SQL como forma de descobrir quem foi o culpado.</p>
             </div>
 
             <div className=" p-4  flex flex-col items-center justify-center gap-4">
-                <h2 className="font-bold text-2xl text-center" style={{color: '#fff'}}>Pronto para começar?</h2>
+                <h2 className="font-bold text-xl sm:text-2xl text-center" style={{color: '#fff'}}>Pronto para começar?</h2>
                 <button
                     className="group px-10 py-3 mb-4 rounded-md bg-amber-500 text-white font-semibold hover:scale-105 hover:bg-white hover:text-black hover:border transition-transform duration-300 inline-flex items-center"
                     onClick={() => setDifficultyModal(!difficultyModal)}

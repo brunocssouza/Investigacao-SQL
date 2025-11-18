@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { execute } from "@/lib/db";
-import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   try {
@@ -10,13 +8,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Senha inválida" }, { status: 400 });
     }
 
-    const rows = await execute("SELECT senha FROM credenciais ORDER BY id ASC LIMIT 1");
-    if (!rows || rows.length === 0) {
-      return NextResponse.json({ error: "Credenciais não configuradas" }, { status: 500 });
+    const envPassword = process.env.ADMIN_PASSWORD;
+    if (!envPassword) {
+      return NextResponse.json({ error: "ADMIN_PASSWORD não configurado" }, { status: 500 });
     }
-    const hash = (rows[0] as any).senha as string;
-    const ok = await bcrypt.compare(password, hash);
-    if (!ok) {
+    if (password !== envPassword) {
       return NextResponse.json({ error: "Senha incorreta" }, { status: 401 });
     }
 

@@ -1,18 +1,18 @@
 ## O Roubo do Diamante do Amanhecer
 
-Aplicação web em Next.js para investigar um caso fictício de roubo no museu. A interface permite executar consultas SQL somente-SELECT sobre um banco MySQL com tabelas de funcionários, salas, obras, acessos, movimentações e depoimentos. As consultas são enviadas para a rota `POST /api/query`, que valida e executa o SQL diretamente via `mysql2` (sem Prisma).
+Aplicação web em Next.js (App Router) para investigar um caso fictício de roubo no museu. A interface permite executar consultas SQL somente‑SELECT sobre um banco compatível com libSQL/Turso.
 
 ### Principais pacotes
-- **Next.js 16**: framework React para web/app router
-- **React 19 / React DOM 19**: biblioteca de UI
-- **mysql2 3**: driver MySQL para Node.js (modo promise)
-- **TypeScript 5**: tipagem estática
-- **Tailwind CSS 4**: utilitários de estilo (classes já usadas na UI)
-- **dotenv 17**: gerenciamento de variáveis de ambiente
+- Next.js (App Router)
+- React / React DOM
+- TypeScript
+- Tailwind CSS
+- libSQL client (`@libsql/client`)
+- dotenv
 
 ## Pré‑requisitos
 - **Node.js 18+** e **npm**
-- **MySQL 8+** em execução (local ou remoto)
+- Banco libSQL/Turso (ou libsql local)
 
 ## Configuração e uso
 1. **Ambientação**
@@ -21,11 +21,21 @@ Aplicação web em Next.js para investigar um caso fictício de roubo no museu. 
    ```
 
 2. **Configurar variáveis de ambiente**
-   Crie um arquivo `.env` na raiz com a variável `DATABASE_URL` apontando para seu MySQL:
+   Crie um arquivo `.env` na raiz com as variáveis abaixo:
    ```dotenv
-   DATABASE_URL="mysql://usuario:senha@localhost:3306/nome_do_banco"
+   # URL do banco libSQL/Turso (obrigatório)
+   DATABASE_URL="libsql://<sua-instancia>.turso.io"
+
+   # Token de autenticação do Turso (se necessário para sua instância)
+   TURSO_AUTH_TOKEN="seu_token_opcional"
+
+   # Nome do culpado (texto simples) para validação em /api/accuse
+   # Valor padrão, se ausente: "Hugo Martins"
+   CULPRIT_NAME="Hugo Martins"
+
+   # Senha de administrador (texto simples) para login em /admin
+   ADMIN_PASSWORD="sua_senha_segura"
    ```
-   O driver `mysql2` utiliza esta URL para abrir o pool de conexões.
 
 5. **Executar o servidor**
    ```bash
@@ -33,12 +43,19 @@ Aplicação web em Next.js para investigar um caso fictício de roubo no museu. 
    # http://localhost:3000
    ```
 
-### Como usar
-- Na página inicial (`/`), escreva uma consulta SELECT simples e clique em "Executar".
-- Restrições de segurança (aplicadas na API):
-  - Apenas comandos que iniciam com `SELECT` são aceitos
-  - Sem `;`, comentários (`--`, `/* */`) ou `UNION`
-  - Palavras como `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, etc. são bloqueadas
+### Como usar (UI)
+- Introdução: escolha a dificuldade e inicie o jogo.
+- Navegação (botões flutuantes): alterna entre
+  - Introdução (Jornal/Informações)
+  - Bloco de Anotações
+  - Consultas (console + exemplos)
+- Consultas: apenas SELECT simples. A execução chama `POST /api/query`.
+- “Acusar um Suspeito”: chama `POST /api/accuse`, comparando o nome (minúsculas) com `CULPRIT_NAME`.
+
+#### Restrições de segurança (aplicadas na API de consultas)
+- Somente comandos que iniciam com `SELECT`
+- Bloqueio de `;`, comentários (`--`, `/* */`) e `UNION`
+- Palavras como `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, etc. são bloqueadas
 
 #### Exemplo de chamada à API
 ```bash
@@ -48,13 +65,23 @@ curl -X POST http://localhost:3000/api/query \
 ```
 
 ## Estrutura relevante
-- `app/page.tsx`: interface para escrever e executar consultas
-- `app/api/query/route.ts`: endpoint que valida e executa SELECT via `mysql2`
-- `lib/db.ts`: pool de conexão e helper de consulta SQL sem Prisma
-- `public/diamante.png`: imagem usada na página
+- `app/page.tsx`: alterna entre Introdução e Game
+- `components/Game.tsx`: exibe uma seção por vez (sem carrossel), com navegação por botões
+- `app/api/query/route.ts`: valida e executa SELECT via libSQL (`queryRaw`)
+- `app/api/accuse/route.ts`: compara nome com `CULPRIT_NAME`
+- `app/api/winners/route.ts`: lista vencedores
+- `app/api/admin/*`: endpoints administrativos
+- `lib/db.ts`: cliente libSQL e helpers (`queryRaw`, `execute`) usando `DATABASE_URL` (+ `TURSO_AUTH_TOKEN` quando necessário)
+
+## Área Administrativa
+- Login em `/admin` com senha definida em `ADMIN_PASSWORD` (texto simples).
+- Em caso de sucesso o backend define o cookie `admin_auth=1` (httpOnly).
+- O middleware (`middleware.ts`) protege `/admin/crud` e `/api/admin/*` e exige esse cookie.
 
 ## Scripts úteis
 - `npm run dev`: ambiente de desenvolvimento
 - `npm run build`: build de produção
-- `npm run start`: inicia build de produção
+- `npm run start`: inicia o build de produção
 
+## Notas
+- O projeto não usa Prisma. Existe um artefato gerado em `app/generated/prisma` que não é utilizado pela aplicação.

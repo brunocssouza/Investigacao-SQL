@@ -47,7 +47,6 @@ export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const query: string | undefined = body?.query;
-    console.log(query)
 
     if (!query || !isSelectOnly(query)) {
       return NextResponse.json(
