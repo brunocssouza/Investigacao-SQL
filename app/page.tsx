@@ -1,7 +1,7 @@
 "use client"
 
-import Game from "@/components/Game"
-import Introduction from "@/components/Introduction"
+import Game from "@/components/pages/furto-no-museu/Game"
+import Introduction from "@/components/pages/Home"
 import { useState } from "react"
 
 
